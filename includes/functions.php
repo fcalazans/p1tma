@@ -103,7 +103,7 @@ function studentDataIncluded($arrID, $arrMark)
 }
 
     // Function that analyses statistical data section of the documents.
-function analytics($arrID, $arrMark)
+function analytics($arrID, $arrMark, $header)
 {
     // Use of a global variable to hold data from errors on the header.
     global $headerErrorCheck;
