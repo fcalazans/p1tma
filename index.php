@@ -26,11 +26,8 @@ echo '<header><h1>TMA Sample Output for all Data Files</h1>';
 $fileData = array();
 $fileNames = array();
 $files = array();
-$moduleCode = array();
-$moduleTitle = array();
-$moduleTutor = array();
-$moduleDate = array();
-$count = 0;
+$studentData = array();
+$fileHeader = array();
 
 // Create a handle
 $handle = opendir('data');
@@ -55,6 +52,10 @@ closedir($handle);
 
 // Iterate over the files in directory.
 foreach ($files as $key => $value) {
+    // $moduleCode = '';
+    // $moduleTitle = '';
+    // $moduleTutor = '';
+    // $moduleDate = '';
     $handle = fopen('data/' . $files[$key], 'r');
     $index = 0;
     $studentID = array();
@@ -66,17 +67,27 @@ foreach ($files as $key => $value) {
         // Check if is not the first line of the file.
         if ($index == 0) {
             // Assign the headers of the file.
-            $moduleCode[] = $fileData[0];
-            $moduleTitle[] = $fileData[1];
-            $moduleTutor[] = $fileData[2];
-            $moduleDate[] = $fileData[3];
+            $fileHeader = array(
+                'moduleCode' => $fileData[0],
+                'moduleTitle' => $fileData[1],
+                'moduleTutor' => $fileData[2],
+                'moduleDate' => $fileData[3],
+            );
+        // $moduleCode = $fileData[0];
+            // $moduleTitle = $fileData[1];
+            // $moduleTutor = $fileData[2];
+            // $moduleDate = $fileData[3];
         } else {
+            $studentData[] = array(
+                $fileData[0] => $fileData[1]
+            );
             $studentID[] = $fileData[0];
             $studentMark[] = $fileData[1];
         }
 
         $index++;
     }
+    var_dump($fileHeader);
 
     // Display Module Header Data title.
     echo '<p>Module Header Data...</p>';
@@ -84,7 +95,7 @@ foreach ($files as $key => $value) {
     // Display file name.
     echo '<p>File name : ' . $files[$key] . '<br>';
     // Header.
-    validateHeader($moduleCode[$key], $moduleTitle[$key], $moduleTutor[$key], $moduleDate[$key]);
+    validateHeader($fileHeader['moduleCode'], $fileHeader['moduleTitle'], $fileHeader['moduleTutor'], $fileHeader['moduleDate']);
     echo '</header>';
 
     // Display Student ID and Mark Array.
@@ -99,13 +110,14 @@ foreach ($files as $key => $value) {
 
     // Display Statistical Analysis of the module marks.
     echo '<section><p>Statistical Analysis of module marks...</p>';
-    analytics($studentID, $studentMark);
+    analytics($studentID, $studentMark, $fileHeader);
     echo '</section>';
 
     // End of Document
     echo '<footer><hr></footer> ';
     $headerErrorCheck = 0;
 }
+
 ?>
 </body>
 </html>
